@@ -11,6 +11,19 @@ export const metadata = {
   title: "CRIMSON RED",
   description: "HUFS rock band club introduction page.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", type: "image/png" }],
+  },
+  openGraph: {
+    title: "CRIMSON RED",
+    description: "HUFS rock band club introduction page.",
+    type: "website",
+    siteName: "CRIMSON RED",
+  },
   appleWebApp: {
     title: "CRIMSON RED",
   },

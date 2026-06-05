@@ -11,6 +11,16 @@
   --line: rgba(255, 255, 255, 0.26);
   --ease-panel: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --z-page-content: 10;
+  --z-record: 15;
+  --z-menu-panel: 22;
+  --z-chrome: 25;
+  --z-header: 40;
+  --z-mobile-menu-backdrop: 48;
+  --z-mobile-menu: 50;
+  --z-sound-backdrop: 58;
+  --z-sound-panel: 60;
+  --z-transition: 70;
 }
 
 * {
@@ -77,16 +87,42 @@ svg {
 .page-shell {
   position: relative;
   min-height: 100vh;
-  isolation: isolate;
   background:
     linear-gradient(108deg, rgba(196, 0, 26, 0.18), transparent 34%),
     linear-gradient(180deg, #050505 0%, #090909 62%, #030303 100%);
 }
 
+.page-shell:has(.members-page) {
+  background:
+    radial-gradient(circle at 84% 68%, rgba(225, 0, 36, 0.24), transparent 18%),
+    linear-gradient(118deg, rgba(225, 0, 36, 0.16), transparent 36%),
+    linear-gradient(180deg, #050505 0%, #090909 58%, #020202 100%);
+}
+
+.page-content {
+  position: relative;
+  z-index: var(--z-page-content);
+  width: 100%;
+  max-width: 100%;
+}
+
+.page-record-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-record);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.page-record-layer .record-trigger {
+  z-index: var(--z-record);
+  pointer-events: auto;
+}
+
 .site-header {
   position: fixed;
   inset: 0 0 auto;
-  z-index: 12;
+  z-index: var(--z-header);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -274,9 +310,10 @@ svg {
 }
 
 .record-trigger {
-  position: absolute;
+  position: fixed;
   right: -22%;
   bottom: -24%;
+  z-index: var(--z-record);
   width: min(74vw, 700px);
   padding: 0;
   border: 0;
@@ -285,8 +322,6 @@ svg {
   pointer-events: auto;
   transform: rotate(-7deg);
   transform-origin: center center;
-  z-index: 5;
-  isolation: isolate;
   transition: filter 220ms ease, transform 220ms ease;
 }
 
@@ -294,7 +329,6 @@ svg {
 .record-trigger:focus-visible,
 .record-trigger.is-active {
   filter: drop-shadow(0 0 28px rgba(255, 31, 61, 0.45));
-  z-index: 6;
 }
 
 .record-trigger:hover,
@@ -353,7 +387,6 @@ svg {
   width: 100%;
   max-width: none;
   opacity: 0.94;
-  mix-blend-mode: screen;
   pointer-events: none;
   user-select: none;
   animation: record-spin 10s linear infinite;
@@ -578,7 +611,7 @@ svg {
 
 .main-menu-panel {
   position: relative;
-  z-index: 8;
+  z-index: var(--z-menu-panel);
   align-self: start;
   margin-top: 48px;
   margin-right: -28px;
@@ -959,12 +992,13 @@ svg {
   left: 28px;
   right: 28px;
   bottom: 10px;
-  z-index: 10;
+  z-index: var(--z-chrome);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 16px;
   min-height: 34px;
+  pointer-events: none;
   color: rgba(255, 255, 255, 0.54);
   font-size: 0.76rem;
   font-weight: 900;
@@ -978,7 +1012,7 @@ svg {
 .mobile-menu-panel {
   position: fixed;
   inset: 66px 10px auto;
-  z-index: 30;
+  z-index: var(--z-mobile-menu);
   display: none;
   padding: 20px 0 28px;
   background:
@@ -991,7 +1025,7 @@ svg {
 .mobile-menu-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 29;
+  z-index: var(--z-mobile-menu-backdrop);
   display: none;
   border: 0;
   background:
@@ -1004,7 +1038,7 @@ svg {
 .transition-bars {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: var(--z-transition);
   display: grid;
   pointer-events: none;
 }
@@ -1042,7 +1076,7 @@ svg {
 .sound-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 44;
+  z-index: var(--z-sound-backdrop);
   border: 0;
   background:
     radial-gradient(circle at 82% 78%, rgba(196, 0, 26, 0.14), transparent 38%),
@@ -1054,7 +1088,7 @@ svg {
   position: fixed;
   right: clamp(210px, 26vw, 360px);
   bottom: clamp(150px, 23vh, 280px);
-  z-index: 46;
+  z-index: var(--z-sound-panel);
   width: min(310px, calc(100vw - 40px));
   overflow: visible;
   transform-origin: bottom right;
@@ -1349,14 +1383,29 @@ svg {
     width: 100%;
   }
 
+  .page-shell {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    padding-bottom: 54px;
+  }
+
   .site-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    width: 100%;
     z-index: 80;
     min-height: 66px;
     padding: 0 16px;
     gap: 12px;
+    background: rgba(0, 0, 0, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .top-nav {
@@ -1394,6 +1443,7 @@ svg {
   .stage {
     display: block;
     padding: 66px 14px 80px;
+    overflow: visible;
   }
 
   .record-trigger {
@@ -1517,12 +1567,13 @@ svg {
   }
 
   .site-footer {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 10px;
     flex-wrap: wrap;
-    padding: 18px;
+    padding: 0;
+    z-index: var(--z-chrome);
   }
 }
 
