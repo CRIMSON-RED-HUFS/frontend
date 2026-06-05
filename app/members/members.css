@@ -135,6 +135,8 @@
 }
 
 .members-main-column {
+  position: relative;
+  z-index: var(--z-member-content);
   display: grid;
   grid-template-rows: minmax(390px, auto) auto;
   gap: 18px;
@@ -761,6 +763,41 @@
   display: none;
 }
 
+@media (min-width: 821px) {
+  .members-page .members-page-grid {
+    pointer-events: none;
+  }
+
+  .members-page .members-page-grid > * {
+    pointer-events: auto;
+  }
+
+  .members-page .members-side-column {
+    pointer-events: none;
+  }
+
+  .members-page .members-side-column .main-menu-panel {
+    pointer-events: auto;
+  }
+
+  .members-page .members-main-column {
+    pointer-events: none;
+  }
+
+  .members-page .members-main-column > * {
+    pointer-events: auto;
+  }
+
+  .members-page .member-card-section {
+    pointer-events: none;
+  }
+
+  .members-page .member-card,
+  .members-page .member-card-arrow {
+    pointer-events: auto;
+  }
+}
+
 @media (max-width: 1280px) {
   .members-page-grid {
     grid-template-columns: 158px minmax(0, 1fr) 430px;
@@ -778,6 +815,10 @@
 }
 
 @media (max-width: 1060px) {
+  .member-filter-panel {
+    padding-top: 24px;
+  }
+
   .members-page-grid {
     grid-template-columns: 220px minmax(0, 1fr);
   }
@@ -828,7 +869,7 @@
 
   .member-filter-panel {
     display: block;
-    padding: 0;
+    padding: 28px 0 0;
   }
 
   .member-filter-group {
@@ -858,8 +899,13 @@
   }
 
   .featured-member {
+    min-height: 0;
+    overflow: visible;
+    clip-path: none;
+  }
+
+  .featured-member.is-empty {
     min-height: 560px;
-    overflow: hidden;
   }
 
   .featured-member::before {
@@ -867,11 +913,25 @@
   }
 
   .featured-member-flip {
+    position: relative;
     min-height: 560px;
+    height: auto;
   }
 
-  .featured-card-front {
+  .featured-card-face.featured-card-front {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 560px;
     grid-template-columns: 1fr;
+  }
+
+  .featured-card-back {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    min-height: 100%;
+    overflow-y: auto;
   }
 
   .featured-portrait-wrap {
@@ -883,7 +943,12 @@
   }
 
   .featured-member-info {
+    justify-content: flex-start;
     padding: 28px 22px 32px;
+  }
+
+  .member-spec-grid dd {
+    overflow-wrap: anywhere;
   }
 
   .featured-name-row h1 {
