@@ -1,6 +1,6 @@
 import { ASSETS } from "../../constants/assets";
 
-export function RecordPlayer({ bgmLevel, className = "", isSoundPanelOpen, onOpenSoundPanel }) {
+export function RecordPlayer({ className = "", isSoundPanelOpen, onOpenSoundPanel }) {
   return (
     <button
       className={`record-trigger ${className} ${isSoundPanelOpen ? "is-active" : ""}`}

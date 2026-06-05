@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { MEMBERS } from "../constants/members";
-
-const DEFAULT_SESSION = "VOCAL";
-const DEFAULT_GENERATION = "41ST";
+import { DEFAULT_GENERATION, DEFAULT_SESSION, MEMBERS } from "../constants/members";
 
 function matchesSession(member, selectedSession) {
   return selectedSession === "ALL" || member.session === selectedSession;
@@ -50,12 +47,13 @@ export function useMemberFilter() {
     () => filteredMembers.find((member) => member.id === selectedMemberId) ?? filteredMembers[0] ?? null,
     [filteredMembers, selectedMemberId],
   );
+  const effectiveSelectedMemberId = selectedMember?.id ?? null;
 
   return {
     filteredMembers,
     selectedGeneration,
     selectedMember,
-    selectedMemberId,
+    selectedMemberId: effectiveSelectedMemberId,
     selectedSession,
     setSelectedGeneration,
     setSelectedMemberId,

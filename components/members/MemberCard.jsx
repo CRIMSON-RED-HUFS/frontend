@@ -1,5 +1,3 @@
-"use client";
-
 import { MemberGlyph } from "./MemberGlyph";
 import { MemberPortrait } from "./MemberPortrait";
 

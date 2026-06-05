@@ -1,5 +1,3 @@
-"use client";
-
 import { GENERATION_FILTERS, SESSION_FILTERS } from "../../constants/members";
 import { MemberGlyph } from "./MemberGlyph";
 

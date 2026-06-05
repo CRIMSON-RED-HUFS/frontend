@@ -24,8 +24,9 @@ export function SiteHeader({ isMobileMenuOpen, onMobileMenuToggle }) {
       <button
         className={`hamburger-button ${isMobileMenuOpen ? "is-open" : ""}`}
         type="button"
-        aria-label="Open main menu"
+        aria-controls="main-menu-mobile"
         aria-expanded={isMobileMenuOpen}
+        aria-label={isMobileMenuOpen ? "Close main menu" : "Open main menu"}
         onClick={onMobileMenuToggle}
       >
         <span />

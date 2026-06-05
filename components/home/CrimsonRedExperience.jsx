@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import { MENU_ITEMS } from "../../constants/menu";
 import { useAudioController } from "../../hooks/useAudioController";
+import { useMenuKeyboardNavigation } from "../../hooks/useMenuKeyboardNavigation";
 import { Stage } from "../hero/Stage";
 import { PageFrame } from "../layout/PageFrame";
 
@@ -13,51 +13,14 @@ export default function CrimsonRedExperience() {
   const reduceMotion = useReducedMotion();
   const audio = useAudioController({ reduceMotion });
 
-  useEffect(() => {
-    function handleKeyDown(event) {
-      const target = event.target;
-      const isTyping =
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        target instanceof HTMLSelectElement ||
-        target?.isContentEditable;
-
-      if (isTyping) return;
-
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        setActiveIndex((index) => (index + 1) % MENU_ITEMS.length);
-      }
-
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        setActiveIndex((index) => (index - 1 + MENU_ITEMS.length) % MENU_ITEMS.length);
-      }
-
-      if (event.key === "Escape" && audio.isSoundPanelOpen) {
-        event.preventDefault();
-        audio.closeSoundPanel();
-      }
-
-      if (event.key === "Escape" && isMobileMenuOpen) {
-        event.preventDefault();
-        setIsMobileMenuOpen(false);
-      }
-
-      if (event.key === "Enter") {
-        const scope = isMobileMenuOpen ? ".mobile-menu-panel" : ".desktop-menu";
-        const item = document.querySelector(`${scope} [data-menu-index="${activeIndex}"]`);
-
-        if (item) {
-          event.preventDefault();
-          item.click();
-        }
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, audio, isMobileMenuOpen]);
+  useMenuKeyboardNavigation({
+    activeIndex,
+    isMobileMenuOpen,
+    isSoundPanelOpen: audio.isSoundPanelOpen,
+    onActiveIndexChange: setActiveIndex,
+    onCloseSoundPanel: audio.closeSoundPanel,
+    onMobileMenuOpenChange: setIsMobileMenuOpen,
+  });
 
   return (
     <PageFrame

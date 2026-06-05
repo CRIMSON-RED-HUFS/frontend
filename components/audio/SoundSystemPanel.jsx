@@ -36,11 +36,11 @@ export function SoundSystemPanel({
         exit={reduceMotion ? {} : { opacity: 0, x: 0, y: 16, scale: 0.96 }}
         transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
       >
-        <aside className="sound-panel" aria-label="Sound system">
+        <aside className="sound-panel" role="dialog" aria-modal="true" aria-labelledby="sound-panel-title">
           <div className="sound-panel-top">
             <div className="sound-panel-titleblock">
               <p className="sound-panel-kicker">AUDIO CONTROL</p>
-              <h2>SOUND SYSTEM</h2>
+              <h2 id="sound-panel-title">SOUND SYSTEM</h2>
             </div>
             <button className="sound-close" type="button" aria-label="Close sound system" onClick={onClose}>
               <CloseIcon />
@@ -72,4 +72,3 @@ export function SoundSystemPanel({
     </>
   );
 }
-

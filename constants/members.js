@@ -9,6 +9,9 @@ export const SESSION_FILTERS = [
 
 export const GENERATION_FILTERS = ["41ST", "40TH", "39TH", "OB"];
 
+export const DEFAULT_SESSION = "VOCAL";
+export const DEFAULT_GENERATION = "41ST";
+
 export const MEMBERS = [
   {
     id: "kang-minji",

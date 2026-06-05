@@ -25,6 +25,7 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
 
   const currentMembers = pages[pageIndex] ?? pages[0];
   const canPage = pages.length > 1;
+  const hasMembers = members.length > 0;
 
   function movePage(direction) {
     setPageIndex((current) => (current + direction + pages.length) % pages.length);
@@ -36,7 +37,7 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
         <p>/// {selectedGeneration} MEMBERS</p>
         <span />
       </div>
-      <div className="member-card-carousel">
+      <div className={`member-card-carousel ${canPage ? "has-pages" : ""}`}>
         {canPage && (
           <button
             className="member-card-arrow member-card-arrow-prev"
@@ -81,11 +82,13 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
           </button>
         )}
       </div>
-      <div className="member-card-pagination" aria-hidden="true">
-        {pages.map((_, index) => (
-          <span key={index} className={index === pageIndex ? "is-active" : ""} />
-        ))}
-      </div>
+      {hasMembers && (
+        <div className="member-card-pagination" aria-hidden="true">
+          {pages.map((_, index) => (
+            <span key={index} className={index === pageIndex ? "is-active" : ""} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

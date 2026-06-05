@@ -533,9 +533,13 @@
 .member-card-carousel {
   position: relative;
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: 8px;
+}
+
+.member-card-carousel.has-pages {
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
 }
 
 .member-card-viewport {

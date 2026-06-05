@@ -42,6 +42,7 @@ export function MobileMainMenu({
             transition={{ duration: 0.24, ease: [0.76, 0, 0.24, 1] }}
           />
           <motion.aside
+            id="main-menu-mobile"
             className="mobile-menu-panel"
             aria-label="Mobile main menu"
             initial={reduceMotion ? false : { opacity: 0, x: 90, skewX: -10 }}

@@ -49,7 +49,6 @@ export function PageFrame({
         {audio && (
           <div className="page-record-layer">
             <RecordPlayer
-              bgmLevel={audio.bgmLevel}
               isSoundPanelOpen={audio.isSoundPanelOpen}
               onOpenSoundPanel={audio.openSoundPanel}
             />
