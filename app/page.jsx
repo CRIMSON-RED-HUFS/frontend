@@ -507,10 +507,20 @@ export default function Home() {
           <strong>RED</strong>
         </a>
         <div className="header-tools" aria-label="Social links">
-          <a href="#instagram" aria-label="Instagram">
+          <a
+            href="https://www.instagram.com/hufs_crimsonred/"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <InstagramIcon />
           </a>
-          <a href="#youtube" aria-label="YouTube">
+          <a
+            href="https://www.youtube.com/channel/UC2VACyqqLyP95VkfFLBRoGA"
+            aria-label="YouTube"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <YouTubeIcon />
           </a>
         </div>
@@ -591,7 +601,7 @@ export default function Home() {
           <img className="deco deco-torn-paper" src="/assets/asset-02.png" alt="" decoding="async" aria-hidden="true" />
         </div>
 
-        <section className="hero" aria-labelledby="hero-title">
+        <section className="hero" aria-labelledby="hero-intro">
           <div className="hero-decorations" aria-hidden="true">
             <img className="deco deco-sheet-music" src="/assets/asset-04.png" alt="" decoding="async" />
           </div>
@@ -609,21 +619,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="side-rail" aria-hidden="true">
-            <span>SCROLL</span>
-            <i />
-          </div>
-
           <motion.div
             className="hero-copy"
             initial={reduceMotion ? false : { opacity: 1, y: 28 }}
             animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
           >
-            <h1 className="hero-title" id="hero-title">
-              <span>CRIMSON</span>
-              <strong>RED</strong>
-            </h1>
             <p className="intro" id="hero-intro">
               한국외대 영어대학 소속 락 밴드 소모임, CRIMSON RED
               <br />
@@ -651,18 +652,12 @@ export default function Home() {
             transition={{ delay: 0.8, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="card-label">RECENT LIVE</p>
-            <div className="stage-thumb" aria-hidden="true">
-              <span className="beam beam-a" />
-              <span className="beam beam-b" />
-              <span className="beam beam-c" />
-              <span className="mic" />
-            </div>
             <div className="event-date">
               <strong>06.02</strong>
-              <span>2025</span>
+              <span>2026</span>
             </div>
             <h2>퀸쿠아트리아 메인 스테이지</h2>
-            <p>서울캠퍼스 강당을 흔든 최근 공연.</p>
+            <p>서울캠퍼스 운동장을 뒤흔든 최근 공연.</p>
             <a className="card-button" href="#archive-details">
               자세히 보기 <ChevronIcon />
             </a>
