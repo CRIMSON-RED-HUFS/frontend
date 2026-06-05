@@ -186,7 +186,6 @@ export function useAudioController({ reduceMotion }) {
       document.documentElement.classList.remove("sound-panel-scroll-lock");
       document.body.classList.remove("sound-panel-scroll-lock");
       document.body.style.top = "";
-      window.scrollTo(0, scrollY);
     };
   }, [isSoundPanelOpen]);
 

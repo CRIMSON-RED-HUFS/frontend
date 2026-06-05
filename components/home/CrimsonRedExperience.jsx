@@ -20,6 +20,7 @@ export default function CrimsonRedExperience() {
     onActiveIndexChange: setActiveIndex,
     onCloseSoundPanel: audio.closeSoundPanel,
     onMobileMenuOpenChange: setIsMobileMenuOpen,
+    onNavigateSound: audio.playMenuHoverSound,
   });
 
   return (

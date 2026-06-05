@@ -1,13 +1,22 @@
+"use client";
+
+import { useState } from "react";
 import { MemberGlyph } from "./MemberGlyph";
 import { MemberPortrait } from "./MemberPortrait";
 
-export function MemberCard({ member, isSelected, onSelect }) {
+export function MemberCard({ member, isSelected, globalIndex, memberCount, onSelect }) {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <button
-      className={`member-card ${isSelected ? "is-selected" : ""}`}
+      className={`member-card ${isSelected ? "is-selected" : ""} ${isFocused ? "is-focused" : ""}`}
       type="button"
       role="option"
       aria-selected={isSelected}
+      data-global-index={globalIndex}
+      data-member-count={memberCount}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
       onClick={() => onSelect(member.id)}
     >
       <MemberPortrait member={member} variant="card" />

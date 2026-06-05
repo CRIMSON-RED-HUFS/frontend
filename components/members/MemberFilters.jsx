@@ -11,13 +11,14 @@ function FilterGroup({ title, children }) {
 }
 
 export function MemberFilters({
+  panelRef,
   selectedGeneration,
   selectedSession,
   onGenerationChange,
   onSessionChange,
 }) {
   return (
-    <aside className="member-filter-panel" aria-label="Member filters">
+    <aside className="member-filter-panel" aria-label="Member filters" ref={panelRef}>
       <FilterGroup title="/// SESSION">
         {SESSION_FILTERS.map((filter) => (
           <button

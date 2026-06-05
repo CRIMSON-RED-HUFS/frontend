@@ -28,8 +28,15 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
   const hasMembers = members.length > 0;
 
   function movePage(direction) {
-    setPageIndex((current) => (current + direction + pages.length) % pages.length);
+    setPageIndex((current) => {
+      const next = current + direction;
+      if (next < 0 || next >= pages.length) return current;
+      return next;
+    });
   }
+
+  const canGoPrev = pageIndex > 0;
+  const canGoNext = pageIndex < pages.length - 1;
 
   return (
     <section className="member-card-section" aria-label={`${selectedGeneration} members`}>
@@ -37,12 +44,20 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
         <p>/// {selectedGeneration} MEMBERS</p>
         <span />
       </div>
-      <div className={`member-card-carousel ${canPage ? "has-pages" : ""}`}>
+      <div
+        className={`member-card-carousel ${canPage ? "has-pages" : ""}`}
+        data-page-index={pageIndex}
+        data-page-count={pages.length}
+        data-can-go-prev={canGoPrev}
+        data-can-go-next={canGoNext}
+      >
         {canPage && (
           <button
-            className="member-card-arrow member-card-arrow-prev"
+            className={`member-card-arrow member-card-arrow-prev ${canGoPrev ? "" : "is-disabled"}`}
             type="button"
             aria-label="Previous members"
+            disabled={!canGoPrev}
+            tabIndex={canGoPrev ? 0 : -1}
             onClick={() => movePage(-1)}
           >
             ‹
@@ -60,10 +75,12 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
               exit={{ opacity: 0, x: -64, skewX: 4 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
-              {currentMembers.map((member) => (
+              {currentMembers.map((member, index) => (
                 <MemberCard
                   key={member.id}
                   member={member}
+                  globalIndex={pageIndex * MEMBERS_PER_PAGE + index}
+                  memberCount={members.length}
                   isSelected={member.id === selectedMemberId}
                   onSelect={onSelectMember}
                 />
@@ -73,9 +90,11 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
         </div>
         {canPage && (
           <button
-            className="member-card-arrow member-card-arrow-next"
+            className={`member-card-arrow member-card-arrow-next ${canGoNext ? "" : "is-disabled"}`}
             type="button"
             aria-label="Next members"
+            disabled={!canGoNext}
+            tabIndex={canGoNext ? 0 : -1}
             onClick={() => movePage(1)}
           >
             ›
