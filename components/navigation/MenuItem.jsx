@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { ChevronIcon } from "../icons/Icons";
+
+const MotionLink = motion(Link);
 
 export function MenuItem({ index, item, isActive, reduceMotion, onActivate, onClose, onHoverSound }) {
   const [isHovered, setIsHovered] = useState(false);
   const isFilled = isActive || isHovered;
 
   return (
-    <motion.a
+    <MotionLink
       className={`menu-item ${isActive ? "is-active" : ""}`}
       href={item.href}
       role="listitem"
@@ -61,6 +64,6 @@ export function MenuItem({ index, item, isActive, reduceMotion, onActivate, onCl
       <span className="menu-arrow">
         <ChevronIcon />
       </span>
-    </motion.a>
+    </MotionLink>
   );
 }

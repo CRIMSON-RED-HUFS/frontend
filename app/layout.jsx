@@ -1,5 +1,7 @@
 import localFont from "next/font/local";
+import { AudioProvider } from "../components/audio/AudioProvider";
 import "./globals.css";
+import "./subpage.css";
 
 const docallismeOnStreet = localFont({
   src: "./fonts/DOCALLISME ON STREET.ttf",
@@ -38,7 +40,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" className={docallismeOnStreet.variable}>
-      <body>{children}</body>
+      <body>
+        <AudioProvider>{children}</AudioProvider>
+      </body>
     </html>
   );
 }

@@ -1,17 +1,36 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AUDIO, DEFAULT_BGM_LEVEL, DEFAULT_SFX_LEVEL } from "../constants/audio";
+import {
+  AUDIO,
+  BGM_TRACKS,
+  DEFAULT_BGM_LEVEL,
+  DEFAULT_BGM_TRACK_ID,
+  DEFAULT_SFX_LEVEL,
+} from "../constants/audio";
+
+function getBgmTrack(trackId) {
+  return BGM_TRACKS.find((track) => track.id === trackId) ?? BGM_TRACKS[0];
+}
+
+function getNextBgmTrack(trackId) {
+  const currentIndex = BGM_TRACKS.findIndex((track) => track.id === trackId);
+  const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % BGM_TRACKS.length;
+
+  return BGM_TRACKS[nextIndex];
+}
 
 export function useAudioController({ reduceMotion }) {
   const [isSoundPanelOpen, setIsSoundPanelOpen] = useState(false);
   const [bgmLevel, setBgmLevel] = useState(DEFAULT_BGM_LEVEL);
   const [sfxLevel, setSfxLevel] = useState(DEFAULT_SFX_LEVEL);
+  const [activeBgmTrackId, setActiveBgmTrackId] = useState(DEFAULT_BGM_TRACK_ID);
   const [isMutedAll, setIsMutedAll] = useState(false);
   const hoverAudioRef = useRef(null);
   const bgmAudioRef = useRef(null);
   const bgmLevelRef = useRef(DEFAULT_BGM_LEVEL);
   const sfxLevelRef = useRef(DEFAULT_SFX_LEVEL);
+  const activeBgmTrackIdRef = useRef(DEFAULT_BGM_TRACK_ID);
   const muteSnapshotRef = useRef(null);
   const audioUnlockedRef = useRef(false);
 
@@ -19,13 +38,20 @@ export function useAudioController({ reduceMotion }) {
     hoverAudioRef.current = new Audio(AUDIO.menuHover);
     hoverAudioRef.current.preload = "auto";
 
-    const bgm = new Audio(AUDIO.mainTheme);
+    const bgm = new Audio(getBgmTrack(DEFAULT_BGM_TRACK_ID).src);
     bgm.preload = "auto";
-    bgm.loop = true;
+    bgm.loop = false;
     bgm.volume = DEFAULT_BGM_LEVEL / 100;
 
     function handleBgmEnded() {
+      const nextTrack = getNextBgmTrack(activeBgmTrackIdRef.current);
+
+      activeBgmTrackIdRef.current = nextTrack.id;
+      setActiveBgmTrackId(nextTrack.id);
+      bgm.src = nextTrack.src;
       bgm.currentTime = 0;
+      bgm.load();
+
       if (bgmLevelRef.current > 0) {
         void bgm.play().catch(() => {});
       }
@@ -48,7 +74,7 @@ export function useAudioController({ reduceMotion }) {
 
     bgmLevelRef.current = level;
     setBgmLevel(level);
-    bgm.loop = true;
+    bgm.loop = false;
     bgm.volume = level / 100;
 
     if (level === 0) {
@@ -135,6 +161,31 @@ export function useAudioController({ reduceMotion }) {
     [applySfxLevel, clearMuteSnapshot, unlockAudio],
   );
 
+  const handleBgmTrackChange = useCallback(
+    (trackId) => {
+      const nextTrack = getBgmTrack(trackId);
+      const bgm = bgmAudioRef.current;
+
+      unlockAudio();
+      activeBgmTrackIdRef.current = nextTrack.id;
+      setActiveBgmTrackId(nextTrack.id);
+
+      if (!bgm) return;
+
+      bgm.pause();
+      bgm.src = nextTrack.src;
+      bgm.currentTime = 0;
+      bgm.loop = false;
+      bgm.volume = bgmLevelRef.current / 100;
+      bgm.load();
+
+      if (bgmLevelRef.current > 0) {
+        void bgm.play().catch(() => {});
+      }
+    },
+    [unlockAudio],
+  );
+
   const handleMuteAll = useCallback(() => {
     if (isMutedAll && muteSnapshotRef.current) {
       const { bgm, sfx } = muteSnapshotRef.current;
@@ -204,20 +255,25 @@ export function useAudioController({ reduceMotion }) {
   return useMemo(
     () => ({
       bgmLevel,
+      bgmTracks: BGM_TRACKS,
+      activeBgmTrackId,
       sfxLevel,
       isMutedAll,
       isSoundPanelOpen,
       openSoundPanel,
       closeSoundPanel,
       handleBgmChange,
+      handleBgmTrackChange,
       handleSfxChange,
       handleMuteAll,
       playMenuHoverSound,
     }),
     [
       bgmLevel,
+      activeBgmTrackId,
       closeSoundPanel,
       handleBgmChange,
+      handleBgmTrackChange,
       handleMuteAll,
       handleSfxChange,
       isMutedAll,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MemberGlyph } from "./MemberGlyph";
+import { SessionGlyph } from "../icons/SessionGlyph";
 import { MemberPortrait } from "./MemberPortrait";
 
 export function MemberCard({ member, isSelected, globalIndex, memberCount, onSelect }) {
@@ -22,7 +22,7 @@ export function MemberCard({ member, isSelected, globalIndex, memberCount, onSel
       <MemberPortrait member={member} variant="card" />
       <span className="member-card-selected-label">SELECTED</span>
       <span className="member-card-icon">
-        <MemberGlyph type={member.session} />
+        <SessionGlyph type={member.session} />
       </span>
       <span className="member-card-copy">
         <strong>{member.name}</strong>

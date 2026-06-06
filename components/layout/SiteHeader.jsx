@@ -1,13 +1,14 @@
+import Link from "next/link";
 import { SOCIAL_LINKS } from "../../constants/social";
 import { InstagramIcon, YouTubeIcon } from "../icons/Icons";
 
 export function SiteHeader({ isMobileMenuOpen, onMobileMenuToggle }) {
   return (
     <header className="site-header">
-      <a className="brand-mark" href="/" aria-label="CRIMSON RED home">
+      <Link className="brand-mark" href="/" aria-label="CRIMSON RED home">
         <span>CRIMSON</span>
         <strong>RED</strong>
-      </a>
+      </Link>
       <div className="header-tools" aria-label="Social links">
         <a
           href={SOCIAL_LINKS.instagram}

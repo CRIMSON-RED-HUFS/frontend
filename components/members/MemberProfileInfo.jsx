@@ -1,4 +1,4 @@
-import { MemberGlyph } from "./MemberGlyph";
+import { SessionGlyph } from "../icons/SessionGlyph";
 
 function formatGeneration(generation) {
   if (generation === "OB") return "OB";
@@ -17,7 +17,7 @@ export function MemberProfileInfo({ member }) {
       <p className="featured-korean-name">{member.koreanName}</p>
       <div className="featured-session">
         <strong>{member.session}</strong>
-        <MemberGlyph type={member.session} />
+        <SessionGlyph type={member.session} />
       </div>
       <dl className="member-spec-grid">
         <div>

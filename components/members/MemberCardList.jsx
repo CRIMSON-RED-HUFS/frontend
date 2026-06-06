@@ -4,28 +4,49 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MemberCard } from "./MemberCard";
 
-const MEMBERS_PER_PAGE = 4;
+const DESKTOP_MEMBERS_PER_PAGE = 4;
+const MOBILE_MEMBERS_PER_PAGE = 2;
+const MOBILE_MEMBER_CARD_QUERY = "(max-width: 820px)";
+
+function getMembersPerPage() {
+  if (typeof window === "undefined") return DESKTOP_MEMBERS_PER_PAGE;
+
+  return window.matchMedia(MOBILE_MEMBER_CARD_QUERY).matches ? MOBILE_MEMBERS_PER_PAGE : DESKTOP_MEMBERS_PER_PAGE;
+}
 
 export function MemberCardList({ members, selectedMemberId, selectedGeneration, onSelectMember }) {
   const [pageIndex, setPageIndex] = useState(0);
+  const [membersPerPage, setMembersPerPage] = useState(getMembersPerPage);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(MOBILE_MEMBER_CARD_QUERY);
+
+    function handleMediaChange() {
+      setMembersPerPage(mediaQuery.matches ? MOBILE_MEMBERS_PER_PAGE : DESKTOP_MEMBERS_PER_PAGE);
+    }
+
+    handleMediaChange();
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
 
   const pages = useMemo(() => {
     const chunks = [];
 
-    for (let index = 0; index < members.length; index += MEMBERS_PER_PAGE) {
-      chunks.push(members.slice(index, index + MEMBERS_PER_PAGE));
+    for (let index = 0; index < members.length; index += membersPerPage) {
+      chunks.push(members.slice(index, index + membersPerPage));
     }
 
     return chunks.length > 0 ? chunks : [[]];
-  }, [members]);
+  }, [members, membersPerPage]);
 
   useEffect(() => {
     setPageIndex(0);
-  }, [selectedGeneration, members.length]);
+  }, [selectedGeneration, members.length, membersPerPage]);
 
   const currentMembers = pages[pageIndex] ?? pages[0];
   const canPage = pages.length > 1;
-  const hasMembers = members.length > 0;
 
   function movePage(direction) {
     setPageIndex((current) => {
@@ -66,7 +87,7 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
         <div className="member-card-viewport">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
-              key={`${selectedGeneration}-${pageIndex}`}
+              key={`${selectedGeneration}-${membersPerPage}-${pageIndex}`}
               className="member-card-grid"
               role="listbox"
               aria-label="Member cards"
@@ -79,7 +100,7 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
                 <MemberCard
                   key={member.id}
                   member={member}
-                  globalIndex={pageIndex * MEMBERS_PER_PAGE + index}
+                  globalIndex={pageIndex * membersPerPage + index}
                   memberCount={members.length}
                   isSelected={member.id === selectedMemberId}
                   onSelect={onSelectMember}
@@ -101,7 +122,7 @@ export function MemberCardList({ members, selectedMemberId, selectedGeneration, 
           </button>
         )}
       </div>
-      {hasMembers && (
+      {canPage && (
         <div className="member-card-pagination" aria-hidden="true">
           {pages.map((_, index) => (
             <span key={index} className={index === pageIndex ? "is-active" : ""} />

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import { useAudioController } from "../../hooks/useAudioController";
+import { useAudio } from "../audio/AudioProvider";
 import { useMenuKeyboardNavigation } from "../../hooks/useMenuKeyboardNavigation";
 import { Stage } from "../hero/Stage";
 import { PageFrame } from "../layout/PageFrame";
@@ -11,7 +11,7 @@ export default function CrimsonRedExperience() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
-  const audio = useAudioController({ reduceMotion });
+  const audio = useAudio();
 
   useMenuKeyboardNavigation({
     activeIndex,

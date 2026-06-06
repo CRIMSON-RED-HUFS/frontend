@@ -7,9 +7,12 @@ export function SoundControl({
   isOpen,
   reduceMotion,
   bgmLevel,
+  bgmTracks,
+  activeBgmTrackId,
   sfxLevel,
   isMutedAll,
   onBgmChange,
+  onBgmTrackChange,
   onSfxChange,
   onMuteAll,
   onClose,
@@ -20,9 +23,12 @@ export function SoundControl({
         <SoundSystemPanel
           reduceMotion={reduceMotion}
           bgmLevel={bgmLevel}
+          bgmTracks={bgmTracks}
+          activeBgmTrackId={activeBgmTrackId}
           sfxLevel={sfxLevel}
           isMutedAll={isMutedAll}
           onBgmChange={onBgmChange}
+          onBgmTrackChange={onBgmTrackChange}
           onSfxChange={onSfxChange}
           onMuteAll={onMuteAll}
           onClose={onClose}
@@ -31,4 +37,3 @@ export function SoundControl({
     </AnimatePresence>
   );
 }
-

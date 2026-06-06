@@ -37,9 +37,12 @@ export function PageFrame({
           isOpen={audio.isSoundPanelOpen}
           reduceMotion={reduceMotion}
           bgmLevel={audio.bgmLevel}
+          bgmTracks={audio.bgmTracks}
+          activeBgmTrackId={audio.activeBgmTrackId}
           sfxLevel={audio.sfxLevel}
           isMutedAll={audio.isMutedAll}
           onBgmChange={audio.handleBgmChange}
+          onBgmTrackChange={audio.handleBgmTrackChange}
           onSfxChange={audio.handleSfxChange}
           onMuteAll={audio.handleMuteAll}
           onClose={audio.closeSoundPanel}

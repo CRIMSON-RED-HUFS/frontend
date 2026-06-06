@@ -1,32 +1,35 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
-import { MENU_ITEMS } from "../../constants/menu";
-import { useAudioController } from "../../hooks/useAudioController";
+import { useAudio } from "../audio/AudioProvider";
 import { useMemberFilter } from "../../hooks/useMemberFilter";
 import { useMenuKeyboardNavigation } from "../../hooks/useMenuKeyboardNavigation";
-import { useMemberSectionKeyboardNavigation } from "../../hooks/useMemberSectionKeyboardNavigation";
+import { useMemberMainColumnKeyboardNavigation } from "../../hooks/useMemberMainColumnKeyboardNavigation";
+import { useSectionKeyboardNavigation } from "../../hooks/useSectionKeyboardNavigation";
+import { usePageShellNavigation } from "../../hooks/usePageShellNavigation";
 import { PageFrame } from "../layout/PageFrame";
+import { SubPageLayout } from "../layout/SubPageLayout";
 import { DesktopMainMenu } from "../navigation/MainMenu";
 import { FeaturedMember } from "./FeaturedMember";
 import { MemberCardList } from "./MemberCardList";
 import { MemberFilters } from "./MemberFilters";
 
-const MEMBERS_MENU_INDEX = Math.max(
-  MENU_ITEMS.findIndex((item) => item.href === "/members"),
-  0,
-);
-
 export default function MembersPage() {
-  const [activeIndex, setActiveIndex] = useState(MEMBERS_MENU_INDEX);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const filterPanelRef = useRef(null);
   const mainColumnRef = useRef(null);
   const menuPanelRef = useRef(null);
   const keyboardSections = useMemo(() => [filterPanelRef, mainColumnRef, menuPanelRef], []);
   const reduceMotion = useReducedMotion();
-  const audio = useAudioController({ reduceMotion });
+  const audio = useAudio();
+  const {
+    activeIndex,
+    setActiveIndex,
+    isMobileMenuOpen,
+    setIsMobileMenuOpen,
+    toggleMobileMenu,
+    closeMobileMenu,
+  } = usePageShellNavigation({ menuHref: "/members" });
   const {
     filteredMembers,
     selectedGeneration,
@@ -38,8 +41,11 @@ export default function MembersPage() {
     setSelectedSession,
   } = useMemberFilter();
 
-  useMemberSectionKeyboardNavigation({
+  const mainColumnKeyboard = useMemberMainColumnKeyboardNavigation(audio.playMenuHoverSound);
+
+  useSectionKeyboardNavigation({
     disabled: isMobileMenuOpen || audio.isSoundPanelOpen,
+    mainColumn: mainColumnKeyboard,
     sections: keyboardSections,
     onNavigateSound: audio.playMenuHoverSound,
   });
@@ -57,43 +63,51 @@ export default function MembersPage() {
 
   return (
     <PageFrame
-      className="members-page"
+      className="subpage-shell members-page"
       reduceMotion={reduceMotion}
       activeIndex={activeIndex}
       isMobileMenuOpen={isMobileMenuOpen}
-      onMobileMenuToggle={() => setIsMobileMenuOpen((open) => !open)}
-      onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
+      onMobileMenuToggle={toggleMobileMenu}
+      onCloseMobileMenu={closeMobileMenu}
       onActivateMenu={setActiveIndex}
       audio={audio}
     >
-      <div className="members-page-grid">
-        <MemberFilters
-          panelRef={filterPanelRef}
-          selectedGeneration={selectedGeneration}
-          selectedSession={selectedSession}
-          onGenerationChange={setSelectedGeneration}
-          onSessionChange={setSelectedSession}
-        />
-
-        <section className="members-main-column" ref={mainColumnRef}>
-          <FeaturedMember member={selectedMember} reduceMotion={reduceMotion} />
-          <MemberCardList
-            members={filteredMembers}
+      <SubPageLayout
+        sidebarWidth="180px"
+        sidebar={
+          <MemberFilters
+            panelRef={filterPanelRef}
             selectedGeneration={selectedGeneration}
-            selectedMemberId={selectedMemberId}
-            onSelectMember={setSelectedMemberId}
+            selectedSession={selectedSession}
+            onGenerationChange={setSelectedGeneration}
+            onSessionChange={setSelectedSession}
           />
-        </section>
-
-        <aside className="members-side-column" ref={menuPanelRef}>
+        }
+        mainAs="section"
+        mainClassName="members-main-column"
+        mainRef={mainColumnRef}
+        main={
+          <>
+            <FeaturedMember member={selectedMember} reduceMotion={reduceMotion} />
+            <MemberCardList
+              members={filteredMembers}
+              selectedGeneration={selectedGeneration}
+              selectedMemberId={selectedMemberId}
+              onSelectMember={setSelectedMemberId}
+            />
+          </>
+        }
+        asideClassName="members-side-column"
+        asideRef={menuPanelRef}
+        aside={
           <DesktopMainMenu
             activeIndex={activeIndex}
             reduceMotion={reduceMotion}
             onActivate={setActiveIndex}
             onHoverSound={audio.playMenuHoverSound}
           />
-        </aside>
-      </div>
+        }
+      />
     </PageFrame>
   );
 }

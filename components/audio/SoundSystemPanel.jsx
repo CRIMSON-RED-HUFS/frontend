@@ -7,9 +7,12 @@ import { SoundTrack } from "./SoundTrack";
 export function SoundSystemPanel({
   reduceMotion,
   bgmLevel,
+  bgmTracks = [],
+  activeBgmTrackId,
   sfxLevel,
   isMutedAll,
   onBgmChange,
+  onBgmTrackChange,
   onSfxChange,
   onMuteAll,
   onClose,
@@ -50,6 +53,31 @@ export function SoundSystemPanel({
           <div className="sound-tracks">
             <SoundTrack id="bgm-level" label="BGM" icon={<BgmIcon />} value={bgmLevel} onChange={onBgmChange} />
             <SoundTrack id="sfx-level" label="SFX" icon={<SfxIcon />} value={sfxLevel} onChange={onSfxChange} />
+          </div>
+
+          <div className="sound-playlist" aria-label="BGM track select">
+            <div className="sound-playlist-head">
+              <span className="sound-playlist-label">TRACK SELECT</span>
+              <span className="sound-playlist-count">{bgmTracks.length.toString().padStart(2, "0")}</span>
+            </div>
+            <div className="sound-playlist-options">
+              {bgmTracks.map((track, index) => {
+                const isActive = track.id === activeBgmTrackId;
+
+                return (
+                  <button
+                    key={track.id}
+                    className={["sound-track-option", isActive ? "is-active" : ""].filter(Boolean).join(" ")}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => onBgmTrackChange(track.id)}
+                  >
+                    <span className="sound-track-option-index">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="sound-track-option-title">{track.title}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="sound-panel-bottom">
